@@ -13,11 +13,19 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @since 1.9.0
  */
 class Sensei_Templates {
-
 	/**
-	 *  Load the template files from within sensei/templates/ or the the theme if overrided within the theme.
+	 * Loads a template part.
+	 *
+	 * This is the load order:
+	 *
+	 * yourtheme/$slug-$name.php
+	 * yourtheme/$plugin_template_url/$slug-$name.php
+	 * $plugin_template_path/$slug-$name.php
+	 * yourtheme/$slug.php
+	 * yourtheme/$plugin_template_url/$slug.php
 	 *
 	 * @since 1.9.0
+	 *
 	 * @param string $slug
 	 * @param string $name default: ''
 	 *
@@ -51,9 +59,8 @@ class Sensei_Templates {
 		}
 
 		if ( $template ) {
-
+			$template = apply_filters( 'sensei_locate_template_part', $template, $slug, $name );
 			load_template( $template, false );
-
 		}
 
 	} // end get part
