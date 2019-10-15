@@ -409,23 +409,21 @@ class Sensei_Quiz {
 
 		$prepared_answers = array();
 
-		// validate incoming answers
+		// Validate incoming answers.
 		if ( empty( $unprepared_answers ) || ! is_array( $unprepared_answers ) ) {
 			return false;
 		}
 
-		// Loop through submitted quiz answers and save them appropriately
+		// Loop through submitted quiz answers and save them appropriately.
 		foreach ( $unprepared_answers as $question_id => $answer ) {
 
-			// get the current questions question type
+			// get the current questions question type.
 			$question_type = Sensei()->question->get_question_type( $question_id );
 
-			// Sanitise answer
-			if ( 0 == get_magic_quotes_gpc() ) {
-				$answer = wp_unslash( $answer );
-			}
+			// Sanitise answer.
+			$answer = wp_unslash( $answer );
 
-			// compress the answer for saving
+			// Compress the answer for saving.
 			if ( 'multi-line' == $question_type ) {
 				$answer = wp_kses( $answer, wp_kses_allowed_html( 'post' ) );
 			} elseif ( 'file-upload' == $question_type ) {
@@ -436,14 +434,14 @@ class Sensei_Quiz {
 						$answer = $attachment_id;
 					}
 				}
-			} // end if
+			}
 
 			$prepared_answers[ $question_id ] = base64_encode( maybe_serialize( $answer ) );
 
-		}// end for each $quiz_answers
+		}
 
 		return $prepared_answers;
-	} // prepare_form_submitted_answers
+	}
 
 	/**
 	 * Reset user submitted questions

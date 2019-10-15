@@ -432,7 +432,7 @@ class Sensei_Utils {
 	 */
 	public static function sensei_save_quiz_answers( $submitted = array(), $user_id = 0 ) {
 
-		if ( intval( $user_id ) == 0 ) {
+		if ( 0 === intval( $user_id ) ) {
 			$user_id = get_current_user_id();
 		}
 
@@ -442,13 +442,12 @@ class Sensei_Utils {
 
 			foreach ( $submitted as $question_id => $answer ) {
 
-				// Get question type
+				// Get question type.
 				$question_type = Sensei()->question->get_question_type( $question_id );
 
-				// Sanitise answer
-				if ( 0 == get_magic_quotes_gpc() ) {
-					$answer = wp_unslash( $answer );
-				}
+				// Sanitise answer.
+				$answer = wp_unslash( $answer );
+
 				switch ( $question_type ) {
 					case 'multi-line':
 						$answer = nl2br( $answer );
@@ -471,7 +470,7 @@ class Sensei_Utils {
 				$answers_saved = self::sensei_log_activity( $args );
 			}
 
-			// Handle file upload questions
+			// Handle file upload questions.
 			if ( isset( $_FILES ) ) {
 				foreach ( $_FILES as $field => $file ) {
 					if ( strpos( $field, 'file_upload_' ) !== false ) {
@@ -496,7 +495,7 @@ class Sensei_Utils {
 
 		return $answers_saved;
 
-	} // End sensei_save_quiz_answers()
+	}
 
 	public static function upload_file( $file = array() ) {
 
