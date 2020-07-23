@@ -99,6 +99,16 @@ export function ExportJobState( updateState ) {
 	};
 
 	/**
+	 * Update job state from REST API.
+	 */
+	const process = async () => {
+		return request( {
+			path: `${ apiPrefix }/${ id }/process`,
+			method: 'POST',
+		} );
+	};
+
+	/**
 	 * Perform REST API request and apply returned job state.
 	 *
 	 * @param {Object} options Request object.
@@ -155,8 +165,12 @@ export function ExportJobState( updateState ) {
 			return;
 		}
 		id = job.id;
-		const { status, error } = job;
-		updateState( { ...job, ...status } );
+		const { status, error, files } = job;
+		updateState( {
+			...job,
+			...status,
+			files: ( files && Object.values( files ) ) || [],
+		} );
 
 		if ( ! error && 'pending' === status.status ) {
 			poll();
@@ -167,7 +181,7 @@ export function ExportJobState( updateState ) {
 	 * Schedule an update request.
 	 */
 	const poll = () => {
-		polling = setTimeout( () => update(), 1000 );
+		polling = setTimeout( () => process(), 1000 );
 	};
 
 	/**
