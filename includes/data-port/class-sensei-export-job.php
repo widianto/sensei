@@ -26,7 +26,7 @@ class Sensei_Export_Job extends Sensei_Data_Port_Job {
 	 * Sensei_Export_Job constructor.
 	 *
 	 * @param string $job_id Unique job id.
-	 * @param string $json   A json string to restore internal state from.
+	 * @param string $json A json string to restore internal state from.
 	 */
 	public function __construct( $job_id, $json = '' ) {
 		parent::__construct( $job_id, $json );
@@ -44,8 +44,12 @@ class Sensei_Export_Job extends Sensei_Data_Port_Job {
 	public function get_tasks() {
 		if ( ! isset( $this->tasks ) ) {
 			$this->tasks = [];
+			$task_class  = [
+				'course' => Sensei_Export_Courses::class,
+			];
+
 			foreach ( $this->get_state( self::CONTENT_TYPES_STATE_KEY ) as $type ) {
-				$this->tasks[ $type ] = new Sensei_Export_Task( $this, $type );
+				$this->tasks[ $type ] = $this->initialize_task( $task_class[ $type ] );
 			}
 		}
 
@@ -59,7 +63,11 @@ class Sensei_Export_Job extends Sensei_Data_Port_Job {
 	 * @return array
 	 */
 	public static function get_file_config() {
-		return [];
+		return [
+			'course'   => [],
+			'lesson'   => [],
+			'question' => [],
+		];
 	}
 
 	/**
@@ -94,6 +102,15 @@ class Sensei_Export_Job extends Sensei_Data_Port_Job {
 	 */
 	public function set_content_types( $content_types ) {
 		$this->set_state( self::CONTENT_TYPES_STATE_KEY, $content_types );
+	}
+
+	/**
+	 * Type order in the logs.
+	 *
+	 * @return array
+	 */
+	public function get_log_type_order() {
+		return [ 'course', 'lesson', 'question' ];
 	}
 
 }
