@@ -1,22 +1,21 @@
 import { InnerBlocks } from '@wordpress/block-editor';
-import { useSelect, withSelect, withDispatch } from '@wordpress/data';
 import { compose } from '@wordpress/compose';
-import { createContext, useEffect } from '@wordpress/element';
-
-import { CourseOutlinePlaceholder } from './placeholder';
-import { COURSE_STORE } from '../store';
-import { useBlocksCreator } from '../use-block-creator';
-import { OutlineBlockSettings } from './settings';
+import { useSelect, withDispatch, withSelect } from '@wordpress/data';
+import { useEffect } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import {
 	withColorSettings,
 	withDefaultBlockStyle,
 } from '../../../shared/blocks/settings';
+import { COURSE_STORE } from '../store';
+import { useBlocksCreator } from '../use-block-creator';
 
-/**
- * A React context which contains the attributes and the setAttributes callback of the Outline block.
- */
-export const OutlineAttributesContext = createContext();
+import { CourseOutlinePlaceholder } from './placeholder';
+import { OutlineBlockSettings } from './settings';
+import {
+	SharedModuleAttributesContext,
+	useSharedModuleAttributesProvider,
+} from './shared-attributes';
 
 /**
  * Edit course outline block component.
@@ -50,14 +49,10 @@ const EditCourseOutlineBlock = ( {
 
 	const { setBlocks } = useBlocksCreator( clientId );
 
-	/**
-	 * Handle update animationsEnabled setting.
-	 *
-	 * @param {boolean} value Value of the setting.
-	 */
-	const updateAnimationsEnabled = ( value ) => {
-		setAttributes( { animationsEnabled: value } );
-	};
+	const ModuleAttributes = useSharedModuleAttributesProvider( {
+		attributes,
+		setAttributes,
+	} );
 
 	const isEmpty = useSelect(
 		( select ) =>
@@ -80,31 +75,30 @@ const EditCourseOutlineBlock = ( {
 	}
 
 	return (
-		<>
-			<OutlineAttributesContext.Provider
-				value={ {
-					outlineAttributes: attributes,
-					outlineSetAttributes: setAttributes,
-				} }
-			>
-				<OutlineBlockSettings
-					animationsEnabled={ attributes.animationsEnabled }
-					setAnimationsEnabled={ updateAnimationsEnabled }
-				/>
+		<SharedModuleAttributesContext.Provider value={ ModuleAttributes }>
+			<OutlineBlockSettings
+				animationsEnabled={
+					ModuleAttributes.sharedAttributes.animationsEnabled
+				}
+				setAnimationsEnabled={ ( value ) =>
+					ModuleAttributes.setSharedAttributes( {
+						animationsEnabled: value,
+					} )
+				}
+			/>
 
-				<section
-					className={ className }
-					style={ { borderColor: borderColor.color } }
-				>
-					<InnerBlocks
-						allowedBlocks={ [
-							'sensei-lms/course-outline-module',
-							'sensei-lms/course-outline-lesson',
-						] }
-					/>
-				</section>
-			</OutlineAttributesContext.Provider>
-		</>
+			<section
+				className={ className }
+				style={ { borderColor: borderColor.color } }
+			>
+				<InnerBlocks
+					allowedBlocks={ [
+						'sensei-lms/course-outline-module',
+						'sensei-lms/course-outline-lesson',
+					] }
+				/>
+			</section>
+		</SharedModuleAttributesContext.Provider>
 	);
 };
 

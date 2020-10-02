@@ -1,6 +1,6 @@
 import { InnerBlocks, RichText } from '@wordpress/block-editor';
 import { compose } from '@wordpress/compose';
-import { useContext, useState } from '@wordpress/element';
+import { useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import classnames from 'classnames';
 import AnimateHeight from 'react-animate-height';
@@ -9,7 +9,7 @@ import {
 	withColorSettings,
 	withDefaultBlockStyle,
 } from '../../../shared/blocks/settings';
-import { OutlineAttributesContext } from '../course-block/edit';
+import { withSharedModuleAttributes } from '../course-block/shared-attributes';
 import SingleLineInput from '../single-line-input';
 import { ModuleBlockSettings } from './settings';
 
@@ -34,10 +34,8 @@ export const EditModuleBlock = ( props ) => {
 		textColor,
 		setAttributes,
 		blockStyle,
+		sharedAttributes,
 	} = props;
-	const {
-		outlineAttributes: { animationsEnabled },
-	} = useContext( OutlineAttributesContext ) || { outlineAttributes: {} };
 	/**
 	 * Handle update name.
 	 *
@@ -82,12 +80,12 @@ export const EditModuleBlock = ( props ) => {
 			/>
 			<section className={ className }>
 				<header
-					className="wp-block-sensei-lms-course-outline-module__name"
+					className="wp-block-sensei-lms-course-outline-module__header"
 					style={ { ...blockStyleColors, color: textColor?.color } }
 				>
-					<h2 className="wp-block-sensei-lms-course-outline__clean-heading">
+					<h2 className="wp-block-sensei-lms-course-outline-module__title">
 						<SingleLineInput
-							className="wp-block-sensei-lms-course-outline-module__name-input"
+							className="wp-block-sensei-lms-course-outline-module__title-input"
 							placeholder={ __( 'Module name', 'sensei-lms' ) }
 							value={ title }
 							onChange={ updateName }
@@ -121,7 +119,7 @@ export const EditModuleBlock = ( props ) => {
 				</header>
 				<AnimateHeight
 					className="wp-block-sensei-lms-collapsible"
-					duration={ animationsEnabled ? 500 : 0 }
+					duration={ sharedAttributes.animationsEnabled ? 500 : 0 }
 					animateOpacity
 					height={ isExpanded ? 'auto' : 0 }
 				>
@@ -152,6 +150,7 @@ export const EditModuleBlock = ( props ) => {
 };
 
 export default compose(
+	withSharedModuleAttributes(),
 	withColorSettings( {
 		mainColor: {
 			style: 'background-color',

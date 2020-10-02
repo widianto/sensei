@@ -16,7 +16,7 @@ export const withColorSettings = ( colorSettings ) => {
 	return ( Component ) => {
 		const ComponentWithColorSettings = ( props ) => (
 			<>
-				<Component { ...props } />
+				<Component { ...props } { ...{ colorSettings } } />
 				<ColorSettings { ...{ colorSettings, props } } />
 			</>
 		);

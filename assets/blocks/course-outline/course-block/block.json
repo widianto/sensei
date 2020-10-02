@@ -18,6 +18,12 @@
     },
     "customBorderColor": {
       "type": "string"
+    },
+    "moduleAttributes": {
+      "type": "object"
+    },
+    "lessonAttributes": {
+      "type": "object"
     }
   },
   "styles": [
