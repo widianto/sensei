@@ -1,4 +1,4 @@
-import { useContext, createContext, useEffect } from '@wordpress/element';
+import { createContext, useContext } from '@wordpress/element';
 import { omit } from 'lodash';
 
 /**
@@ -26,30 +26,15 @@ const useSharedAttributesContextProvider = (
 			[ key ]: omit( attributes[ key ] || {}, keys ),
 		} );
 
-	// const Provider = ( { children } ) => (
-	// 	<Context.Provider
-	// 		value={ {
-	// 			sharedAttributes,
-	// 			setSharedAttributes,
-	// 		} }
-	// 	>
-	// 		{ children }
-	// 	</Context.Provider>
-	// );
 	return { setSharedAttributes, sharedAttributes, removeSharedAttributes };
 };
 
-export const withSharedModuleAttributes = () => ( Component ) => ( props ) => {
+export const withSharedAttributes = () => ( Component ) => ( props ) => {
 	const {
 		sharedAttributes,
 		setSharedAttributes,
 		removeSharedAttributes,
 	} = useContext( SharedModuleAttributesContext );
-
-	// useEffect( () => {
-	// 	for ( const x of sharedAttributes ) {
-	// 	}
-	// }, [ attributes, sharedAttributes ] );
 
 	const attributes = { ...props.attributes, ...sharedAttributes };
 	const setAttributes = ( change ) => {
@@ -70,6 +55,8 @@ export const withSharedModuleAttributes = () => ( Component ) => ( props ) => {
 		<Component
 			{ ...props }
 			{ ...{
+				attributes,
+				setAttributes,
 				sharedAttributes,
 				setSharedAttributes,
 				removeSharedAttributes,

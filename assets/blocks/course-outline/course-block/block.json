@@ -20,7 +20,13 @@
       "type": "string"
     },
     "moduleAttributes": {
-      "type": "object"
+      "type": "object",
+      "default": {
+        "mainColor": "",
+        "customMainColor": "",
+        "textColor": "",
+        "customTextColor": ""
+      }
     },
     "lessonAttributes": {
       "type": "object"
