@@ -1,7 +1,7 @@
 import { InnerBlocks, RichText } from '@wordpress/block-editor';
 import { Icon } from '@wordpress/components';
 import { compose } from '@wordpress/compose';
-import { useContext, useState } from '@wordpress/element';
+import { useContext, useState, useEffect } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import classnames from 'classnames';
 import AnimateHeight from 'react-animate-height';
@@ -16,6 +16,7 @@ import SingleLineInput from '../single-line-input';
 import { ModuleStatus } from './module-status';
 import { ModuleBlockSettings } from './settings';
 import { useInsertLessonBlock } from './use-insert-lesson-block';
+import { applyParentStyle } from '../apply-parent-style';
 
 /**
  * Edit module block component.
@@ -40,12 +41,25 @@ export const EditModuleBlock = ( props ) => {
 		textColor,
 		setAttributes,
 		blockStyle,
+		name,
 	} = props;
 	const {
 		outlineAttributes: { collapsibleModules },
 	} = useContext( OutlineAttributesContext ) || { outlineAttributes: {} };
 
 	useInsertLessonBlock( props );
+
+	const [ outlineClass, setOutlineClass ] = useState( null );
+
+	useEffect( () => {
+		applyParentStyle(
+			'sensei-lms/course-outline',
+			name,
+			clientId,
+			outlineClass,
+			setOutlineClass
+		);
+	} );
 
 	/**
 	 * Handle update name.

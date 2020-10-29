@@ -23,17 +23,6 @@
       "type": "boolean"
     }
   },
-  "styles": [
-    {
-      "name": "borderless",
-      "label": "Borderless"
-    },
-    {
-      "name": "default",
-      "label": "Bordered",
-      "isDefault": true
-    }
-  ],
   "example": {
     "attributes": {
       "isPreview": true
