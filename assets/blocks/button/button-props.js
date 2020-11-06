@@ -55,12 +55,18 @@ export function getButtonProps( props ) {
  * @param {string} props.attributes.align Alignment attribute.
  * @return {{className}} Output HTML attributes.
  */
-export function getButtonWrapperProps( { className, attributes: { align } } ) {
+export function getButtonWrapperProps( {
+	className,
+	attributes: { align },
+	...props
+} ) {
 	return {
 		className: classnames(
 			className,
 			'wp-block-sensei-button',
-			`has-text-align-${ align || 'full' }`
+			`has-text-align-${
+				align || props.alignmentOptions?.default || 'full'
+			}`
 		),
 	};
 }
