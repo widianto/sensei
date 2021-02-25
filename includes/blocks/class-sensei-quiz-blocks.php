@@ -45,6 +45,7 @@ class Sensei_Quiz_Blocks extends Sensei_Blocks_Initializer {
 	public function initialize_blocks() {
 		new Sensei_Block_Quiz();
 		new Sensei_Block_Quiz_Question();
+		new Sensei_Block_Quiz_Actions();
 	}
 
 }
