@@ -1,6 +1,6 @@
 {
   "name": "sensei-lms/quiz-question",
-  "parent": [ "sensei-lms/quiz" ],
+  "parent": [ "sensei-lms/quiz-questions" ],
   "category": "sensei-lms",
   "supports": {
     "html": false
