@@ -13,11 +13,8 @@ import { __, sprintf } from '@wordpress/i18n';
  */
 import { registerStructureStore } from '../../shared/structure/structure-store';
 
-import {
-	syncStructureToBlocks,
-	extractStructure,
-	getFirstBlockByName,
-} from './data';
+import { syncStructureToBlocks, extractStructure } from './data';
+import { getFirstBlockByName } from '../../shared/helpers/blocks';
 
 const getEditorOutlineBlock = () =>
 	getFirstBlockByName(
